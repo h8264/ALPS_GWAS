@@ -1,0 +1,17 @@
+for i in {1..22};
+do
+plink2 \
+--bfile UKB_gene_v3_imp_imag_qc_chr${i} \
+--glm hide-covar cols=chrom,pos,ax,a1freq,nobs,beta,se,tz,p \
+--geno 0.05 \
+--mind 0.05 \
+--maf 0.01 \
+--hwe 1e-6 \
+--vif 1000 \
+--exclude snp_chr${i}.txt \
+--pheno pheno.txt \
+--covar cov.txt \
+--covar-variance-standardize
+--out ukb_imp_chr${i} \
+;done
+

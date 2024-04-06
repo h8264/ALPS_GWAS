@@ -1,0 +1,46 @@
+#!/bin/bash
+
+## target data QC
+cd ${pathway}/PRS/gene_QC
+
+plink --bfile ${gene_pre}  \
+--maf 0.001 \
+--hwe 1e-6 \
+--geno 0.05 \
+--mind 0.05 \
+--keep ${pathway}/id.txt \
+--threads 10 \
+--make-bed --out ${pathway}/PRS/gene_QC/gene_qc
+
+
+## prscs
+cd  ${pathway}/PRS/
+  
+for i in {1..22}
+do
+python PRScs.py \
+--ref_dir=/ld_ref/ldblk_1kg_eur \
+--bim_prefix=${pathway}/PRS/gene_QC/gene_qc \
+--sst_file=${sumstats_file} \
+--n_gwas=${num_gwas} \
+--chrom=${i} \
+--seed=31337 \
+--out_dir=${pathway}/PRS/prscs_out/chr${i}
+done
+
+
+### plink_score
+cd ${pathway}/PRS/plink_score
+
+for i in {1..22}
+do
+plink2 \
+--bfile ${pathway}/PRS/gene_QC/gene_qc \
+--keep ${pathway}/id.txt \
+--maf 0.01 --hwe 1e-6 --geno 0.05 \
+--score ${pathway}/PRS/prscs_out/chr${i}_pst_eff_a1_b0.5_phiauto_chr${i}.txt 2 4 6 list-variants ignore-dup-ids cols=+scoresums \
+--chr ${i} \
+--out ${pathway}/PRS/plink_score/ALPS_M.chr${i} \
+--threads 40
+done
+

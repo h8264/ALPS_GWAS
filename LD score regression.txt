@@ -1,0 +1,25 @@
+#####1. Reformatting summary statistics #####
+python munge_sumstats.py \
+--sumstats GWAS_phenontype1.txt \
+--merge-alleles w_hm3.noMHC.snplist \
+--chunksize 500000 \
+--out phenotype1
+
+
+#####2. Genetic correlation #####
+python ldsc.py \
+--rg phenotype1.sumstats.gz,phenotype2.sumstats.gz \
+--ref-ld-ch reur_w_ld_chr/ \
+--w-ld-chr eur_w_ld_chr/ \
+--out phenotype1_phenotype2_rg
+
+
+#####3. Partitioned heritability #####
+python ldsc.py \
+--h2 phenotype1.sumstats.gz \
+--ref-ld-chr 1000G_Phase3_baseline/baselineLD. \
+–-w-ld-chr 1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
+--overlap-annot \
+--frqfile-chr 1000G_Phase3_frq/1000G.EUR.QC. \
+--out phenotype1_partitioned_h2
+

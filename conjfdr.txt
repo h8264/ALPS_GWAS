@@ -1,0 +1,17 @@
+#!/bin/bash
+pheno="ALPS"
+test="conjfdr"
+threshold="0.05"
+sed s/{test}/${test}/g /pathway/pleiofdr-master/config_LLB.txt > /pathway/pleiofdr-master/config.txt
+sed -i -e s/{threshold}/${threshold}/g -e s/{pheno}/${pheno}/g /pathway/pleiofdr-master/config.txt
+while read i
+do
+sed -i s/neuropsychiatric/${i}/g /pathway/pleiofdr-master/config.txt
+cd /pathway/pleiofdr-master/
+  matlab -nodisplay -nosplash < runme.m
+pheno="ALPS"
+test="conjfdr"
+threshold="0.05"
+sed s/{test}/${test}/g /pathway/pleiofdr-master/config_LLB.txt > /pathway/pleiofdr-master/config.txt
+sed -i -e s/{threshold}/${threshold}/g -e s/{pheno}/${pheno}/g /pathway/pleiofdr-master/config.txt
+done < /pathway/BH_pheno.txt

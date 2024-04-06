@@ -1,0 +1,11 @@
+for i in {1..15};
+do
+finemap \
+--sss \
+--log \
+--corr-config 0.95 \
+--n-causal-snps 5 \
+--in-files master \
+--dataset ${i} \
+--n-threads 64 \
+;done

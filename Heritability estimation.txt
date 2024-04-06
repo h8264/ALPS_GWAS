@@ -1,0 +1,22 @@
+#####1. GCTA heritability #####
+gcta \
+--grm GRM \
+--pheno phenotype.txt \
+--mpheno 1 \
+--reml \
+--qcovar qcovar.txt \
+--covar covar.txt \
+--out phenotype1_h2
+
+
+#####2. LDSC heritability #####
+python munge_sumstats.py \
+--sumstats GWAS_phenontype1.txt \
+--chunksize 500000
+--out phenotype1
+
+python ldsc.py \
+--h2 phenotype1.sumstats.gz \
+--ref-ld-chr eur_w_ld_chr/ 
+--w-ld-chr eur_w_ld_chr/
+--out phenotype1_h2

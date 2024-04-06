@@ -1,0 +1,3 @@
+library(metafor)
+Linear_model <- rma.uni(yi=BETA, sei=SE,weights = 1/(SE*SE),ni=N,mods=~Age_median,weighted=T,method="FE" ,data=data[[i]])
+Quadratic_model <- rma(yi=BETA, sei=SE,weights = 1/(SE*SE),ni=N, weighted=T,method="FE", mods = ~ Age_median + I(Age_median^2), data=data[[i]])                     
